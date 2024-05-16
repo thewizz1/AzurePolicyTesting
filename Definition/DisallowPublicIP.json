@@ -1,0 +1,38 @@
+{
+    "id": "/subscriptions/05bf20e9-5798-4826-996a-a543528fdbbe/providers/Microsoft.Authorization/policyDefinitions/70856e3a-df64-4d5d-bbe8-a72a678b040f",
+    "name": "70856e3a-df64-4d5d-bbe8-a72a678b040f",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "properties": {
+        "mode": "All",
+        "policyType": "Custom",
+        "parameters": {
+            "policyRule": {
+                "type": "string",
+                "metadata": {
+                    "category": "Network",
+                    "updatedBy": null,
+					"updatedOn": null
+                }
+            }
+        },
+        "displayName": "Disallow public IPs on Network",
+        "description": "This policy disallows the creation of public IPs. Public IP addresses allow internet resources to communicate inbound to Azure resources, and Azure resources to communicate outbound to the internet. This introduces risk and should be reviewed by the network security team.",
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/networkInterfaces"
+                    },
+                    {
+                        "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].publicIpAddress.id",
+                        "notEquals": "*"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}
